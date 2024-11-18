@@ -27,17 +27,29 @@ async function main() {
   console.log("Debug: Closing mongoose");
   mongoose.connection.close();
 }
-async function userCreate(index, name, user_name, password, status) {
+async function userCreate(
+  index,
+  user_name,
+  password,
+  status,
+  firstName,
+  lastName,
+  email,
+  phoneNum
+) {
   const user = new User({
-    name,
     user_name: user_name,
     password: await hashedPass2(password),
     member_status: status,
+    firstName,
+    lastName,
+    email,
+    phoneNum,
   });
 
   await user.save();
   users[index] = user;
-  console.log(`added user: ${user.name} ${user.user_name}`);
+  console.log(`added user: ${user.firstName} ${user.user_name}`);
 }
 async function commentCreate(index, user, date_added, comment) {
   const commentObj = new Comment({
@@ -57,7 +69,18 @@ async function hashedPass2(password) {
 
 async function createUsers() {
   console.log("adding Users");
-  await Promise.all([userCreate(0, "J", "daechi73", "Wnsvy777!!!", "admin")]);
+  await Promise.all([
+    userCreate(
+      0,
+      "daechi73",
+      "Wnsvy777!!!",
+      "admin",
+      "J",
+      "H",
+      "jcodes92@gmail.com",
+      "647-529-9208"
+    ),
+  ]);
 }
 
 // async function createComments() {
