@@ -87,6 +87,14 @@ exports.user_sign_out = asyncHandler(async (req, res, next) => {
     if (err) {
       return next(err);
     }
+    req.session.destroy((err) => {
+      if (err)
+        return res.status(500).json({
+          status: "Failed",
+          error: err,
+          msg: "Session destroy failed",
+        });
+    });
     res.json({
       status: "success",
       user: req.user,
