@@ -12,6 +12,7 @@ var bodyParser = require("body-parser");
 const User = require("../models/user");
 require("dotenv").config();
 const serverless = require("serverless-http");
+const MongoStore = require("connect-mongo");
 
 const indexRouter = require("../routes/index");
 const usersRouter = require("../routes/users");
@@ -21,7 +22,7 @@ const app = express();
 
 mongoose.set("strictQuery", false);
 
-const mongodb = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASS}@cluster0.o5wrez4.mongodb.net/jcodesBLog?retryWrites=true&w=majority`;
+const mongodb = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASS}@cluster0.e8wew.mongodb.net/jcodes?retryWrites=true&w=majority&appName=Cluster0`;
 
 main().catch((err) => {
   console.log(err);
@@ -98,6 +99,9 @@ app.use(
     secret: "cats",
     resave: false,
     saveUninitialized: false, //logs all previously logged on users even after logging out when set to true
+    store: MongoStore.create({
+      mongoUrl: mongodb,
+    }),
     cookie: {
       httpOnly: false,
       secure: true, // Use true only in production with HTTPS,
