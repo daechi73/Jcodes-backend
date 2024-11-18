@@ -95,23 +95,39 @@ exports.user_sign_out = asyncHandler(async (req, res, next) => {
 });
 
 exports.user_sign_up = [
-  body("name")
+  body("firstName")
     .trim()
     .exists()
     .withMessage("You must Enter a first name")
-    .isLength({ min: 3 })
-    .withMessage("name has to be atleast 3 characters long"),
+    .isLength({ min: 3, max: 100 })
+    .withMessage("name has to be atleast 3 characters long and 100 max"),
+  body("lastName")
+    .trim()
+    .exists()
+    .withMessage("You must enter a last name")
+    .isLength({ min: 3, max: 100 })
+    .withMessage("name has to be bewteen 3 to 100"),
   body("username")
     .trim()
     .exists()
     .withMessage("You must Enter a username")
-    .isLength({ min: 3 })
-    .withMessage("Username has to be atleast 3 characters long")
+    .isLength({ min: 3, max: 100 })
+    .withMessage("Username has to be between 3 to 100 characters")
     .custom(async (value) => {
       const user = await User.findOne({ user_name: value }).exec();
       if (user) {
         throw new Error("Username already in use");
       }
+    }),
+  body("email")
+    .trim()
+    .exists()
+    .withMessage("You must enter an email.")
+    .isEmail()
+    .isLength({ max: 100 })
+    .custom(async (val) => {
+      const email = await User.findOne({ email: val }).exec();
+      if (email) throw new Error("Email Already in use");
     }),
   body("password")
     .trim()
@@ -119,13 +135,22 @@ exports.user_sign_up = [
     .withMessage("You must enter a password")
     .isLength({ min: 8 })
     .withMessage("Password must be atleast 8 charaters."),
+  body("phoneNum")
+    .exists()
+    .withMessage("You must enter a phone number")
+    .trim()
+    .isLength({ max: 100 })
+    .withMessage("Password has to be between 8 to 100 characters"),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
 
     const user = new User({
-      name: req.body.name,
       user_name: req.body.username.toLowerCase(),
       password: await HashedPassword(req.body.password),
+      firstName: req.body.firstName,
+      lastName: req.body.lastName,
+      email: req.body.email,
+      phoneNum: req.body.phoneNum,
     });
     if (!errors.isEmpty()) {
       res.json({
