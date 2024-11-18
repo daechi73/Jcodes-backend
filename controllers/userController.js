@@ -24,15 +24,6 @@ exports.user_detail = asyncHandler(async (req, res, next) => {
 exports.user_sign_in = [
   asyncHandler(async (req, res, next) => {
     try {
-      if (req.user) {
-        const noPasswordUser = req.user.toObject();
-        delete noPasswordUser.password;
-        return res.status(200).json({
-          status: "success",
-          user: req.user,
-          msg: "Resumed previous log in",
-        });
-      }
       passport.authenticate("local", (err, user, options) => {
         if (!user) {
           return res.json("Log in failed, try again");
@@ -130,9 +121,10 @@ exports.user_sign_up = [
     .withMessage("Password must be atleast 8 charaters."),
   asyncHandler(async (req, res, next) => {
     const errors = validationResult(req);
+
     const user = new User({
       name: req.body.name,
-      user_name: req.body.username,
+      user_name: req.body.username.toLowerCase(),
       password: await HashedPassword(req.body.password),
     });
     if (!errors.isEmpty()) {

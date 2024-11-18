@@ -65,7 +65,7 @@ app.use(function (req, res, next) {
 passport.use(
   new LocalStrategy(async (username, password, done) => {
     try {
-      const user = await User.findOne({ user_name: username });
+      const user = await User.findOne({ user_name: username.toLowerCase() });
       if (!user) {
         return done(null, false, { message: "Incorrect username" });
       }
