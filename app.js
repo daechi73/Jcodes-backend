@@ -21,11 +21,12 @@ var app = express();
 
 mongoose.set("strictQuery", false);
 
-const mongodb = `mongodb+srv://${process.env.USER_NAME}:${process.env.PASS}@cluster0.e8wew.mongodb.net/jcodes?retryWrites=true&w=majority&appName=Cluster0`;
+const mongodb = `mongodb+srv://${process.env.DEV_USER_NAME}:${process.env.DEV_PASS}@cluster0.o5wrez4.mongodb.net/jcodes?retryWrites=true&w=majority&appName=Cluster0`;
 
 main().catch((err) => {
   console.log(err);
 });
+
 async function main() {
   await mongoose.connect(mongodb);
 }
@@ -130,7 +131,8 @@ app.use(function (err, req, res, next) {
 
   // render the error page
   res.status(err.status || 500);
-  res.render("error");
+  // res.render("error");
+  res.json("Error");
 });
 
 module.exports = app;
