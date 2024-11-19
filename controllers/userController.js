@@ -100,13 +100,13 @@ exports.user_sign_up = [
     .exists()
     .withMessage("You must Enter a first name")
     .isLength({ min: 3, max: 100 })
-    .withMessage("name has to be atleast 3 characters long and 100 max"),
+    .withMessage("First name has to be between 3 to 100 characters"),
   body("lastName")
     .trim()
     .exists()
     .withMessage("You must enter a last name")
     .isLength({ min: 3, max: 100 })
-    .withMessage("name has to be bewteen 3 to 100"),
+    .withMessage("Last name has to be bewteen 3 to 100 characters"),
   body("username")
     .trim()
     .exists()
