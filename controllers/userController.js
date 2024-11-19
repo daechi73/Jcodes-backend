@@ -56,6 +56,10 @@ exports.user_resume_signIn = asyncHandler((req, res) => {
       msg: "Resumed previous log in",
     });
   }
+  return res.status(200).json({
+    status: "failed",
+    msg: "No existing sign-in to resume",
+  });
 });
 
 exports.get_signedInUSer = asyncHandler(async (req, res) => {
