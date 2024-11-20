@@ -90,7 +90,8 @@ exports.user_sign_out = asyncHandler(async (req, res, next) => {
           msg: "Session destroy failed",
         });
     });
-    res.json({
+    res.clearCookie("connect.sid");
+    return res.json({
       status: "success",
       user: req.user,
       msg: "Signed out successfully",
