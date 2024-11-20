@@ -96,7 +96,7 @@ passport.deserializeUser(async (id, done) => {
 
 app.use(
   session({
-    secret: "cats",
+    secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false, //logs all previously logged on users even after logging out when set to true
     store: MongoStore.create({

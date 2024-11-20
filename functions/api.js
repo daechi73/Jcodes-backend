@@ -19,6 +19,7 @@ const usersRouter = require("../routes/users");
 const commentsRouter = require("../routes/comments");
 
 const app = express();
+``;
 
 mongoose.set("strictQuery", false);
 
@@ -96,14 +97,14 @@ passport.deserializeUser(async (id, done) => {
 
 app.use(
   session({
-    secret: "cats",
-    resave: false,
-    saveUninitialized: false, //logs all previously logged on users even after logging out when set to true
+    secret: process.env.SESSION_SECRET,
+    resave: false, //saves all sessions with or without modification if set to true.
+    saveUninitialized: false, // saves all new sessions with no or with modification. if set to true
     store: MongoStore.create({
       mongoUrl: mongodb,
     }),
     cookie: {
-      httpOnly: false,
+      httpOnly: true, // Cookie is not accessible through client application if set to true
       secure: true, // Use true only in production with HTTPS,
       sameSite: "None", // or "None" if cross-origin "Lax" if its not
       maxAge: 24 * 60 * 60 * 1000, // 1 day
@@ -111,7 +112,6 @@ app.use(
   })
 );
 
-app.use(session({ secret: "cats", resave: false, saveUninitialized: true }));
 app.use(passport.initialize());
 app.use(passport.session());
 app.use(express.urlencoded({ extended: false }));
