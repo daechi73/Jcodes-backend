@@ -102,19 +102,19 @@ exports.user_sign_out = asyncHandler(async (req, res, next) => {
 exports.user_sign_up = [
   body("firstName")
     .trim()
-    .exists()
+    .exists({ values: "falsy" })
     .withMessage("You must Enter a first name")
     .isLength({ min: 3, max: 100 })
     .withMessage("First name has to be between 3 to 100 characters"),
   body("lastName")
     .trim()
-    .exists()
+    .exists({ values: "falsy" })
     .withMessage("You must enter a last name")
     .isLength({ min: 3, max: 100 })
     .withMessage("Last name has to be bewteen 3 to 100 characters"),
   body("username")
     .trim()
-    .exists()
+    .exists({ values: "falsy" })
     .withMessage("You must Enter a username")
     .isLength({ min: 3, max: 100 })
     .withMessage("Username has to be between 3 to 100 characters")
@@ -126,9 +126,10 @@ exports.user_sign_up = [
     }),
   body("email")
     .trim()
-    .exists()
-    .withMessage("You must enter an email.")
+    .exists({ values: "falsy" })
+    .withMessage("You must enter an email")
     .isEmail()
+    .withMessage("You must enter an email")
     .isLength({ max: 100 })
     .custom(async (val) => {
       const email = await User.findOne({ email: val }).exec();
@@ -136,12 +137,12 @@ exports.user_sign_up = [
     }),
   body("password")
     .trim()
-    .exists()
+    .exists({ values: "falsy" })
     .withMessage("You must enter a password")
     .isLength({ min: 8 })
-    .withMessage("Password must be atleast 8 charaters."),
+    .withMessage("Password must be atleast 8 charaters"),
   body("phoneNum")
-    .exists()
+    .exists({ values: "falsy" })
     .withMessage("You must enter a phone number")
     .trim()
     .isLength({ max: 100 })
